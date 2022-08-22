@@ -1,32 +1,29 @@
 package com.onemorelvl.passwordking;
 
-import android.widget.ImageView;
-import android.widget.TextView;
-
 class PasswordKingModel {
    private int mImageView;
-   private String tvCompanyName, tvUserName, tvPassword;
+   private String mCompanyName, mUserName, mPassword;
 
    public PasswordKingModel(int imageView, String tvCompanyName, String tvUserName, String tvPassword) {
       mImageView = imageView;
-      this.tvCompanyName = tvCompanyName;
-      this.tvUserName = tvUserName;
-      this.tvPassword = tvPassword;
+      this.mCompanyName = tvCompanyName;
+      this.mUserName = tvUserName;
+      this.mPassword = tvPassword;
    }
 
    public int getImageView() {
       return mImageView;
    }
 
-   public String getTvCompanyName() {
-      return tvCompanyName;
+   public String getCompanyName() {
+      return mCompanyName;
    }
 
-   public String getTvUserName() {
-      return tvUserName;
+   public String getUserName() {
+      return mUserName;
    }
 
-   public String getTvPassword() {
-      return tvPassword;
+   public String getPassword() {
+      return mPassword;
    }
 }

@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         FloatingActionButton fab = findViewById(R.id.floatingActionButton);
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
 
@@ -64,7 +65,6 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         });
 
         initAccountInfo();
-
         initRecyclerView(recyclerView);
 
     }
@@ -72,10 +72,13 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
 
     @Override
     public boolean onCreateOptionsMenu(@NonNull Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.search_menu, menu);
+        getMenuInflater().inflate(R.menu.search_menu, menu);
         MenuItem searchItem = menu.findItem(R.id.actionSearch);
         SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setQueryHint("Enter Text to Search");
+        searchView.setIconifiedByDefault(false);
+        searchView.requestFocusFromTouch();
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -112,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         ArrayList<PasswordKingModel> filteredList = new ArrayList<>();
 
         for (PasswordKingModel item : mPasswordKingModels) {
-            if (item.getTvCompanyName().toLowerCase().contains(text.toLowerCase())) {
+            if (item.getCompanyName().toLowerCase().contains(text.toLowerCase())) {
                 filteredList.add(item);
             }
         }
@@ -134,9 +137,9 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         Intent intent1 = new Intent(this, DataEntry.class);
         PasswordKingModel accountInfo = mPasswordKingModels.get(position);
         intent1.putExtra("ID", position);
-        intent1.putExtra("CompanyName", accountInfo.getTvCompanyName());
-        intent1.putExtra("UserName", accountInfo.getTvUserName());
-        intent1.putExtra("Password", accountInfo.getTvPassword());
+        intent1.putExtra("CompanyName", accountInfo.getCompanyName());
+        intent1.putExtra("UserName", accountInfo.getUserName());
+        intent1.putExtra("Password", accountInfo.getPassword());
         mActivityResultLauncher.launch(intent1);
 
     }

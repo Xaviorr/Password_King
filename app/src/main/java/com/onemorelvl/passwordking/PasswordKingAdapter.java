@@ -1,7 +1,6 @@
 package com.onemorelvl.passwordking;
 
 import android.content.Context;
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,9 +37,9 @@ class PasswordKingAdapter extends RecyclerView.Adapter<PasswordKingAdapter.MyVie
     @Override
     public void onBindViewHolder(@NonNull PasswordKingAdapter.MyViewHolder holder, int position) {
         holder.mImageView.setImageResource(R.drawable.ic_baseline_account_circle_48);
-        holder.tvCompany.setText(mPasswordKingModels.get(position).getTvCompanyName());
-        holder.tvUserName.setText(mPasswordKingModels.get(position).getTvUserName());
-        holder.tvPassword.setText(mPasswordKingModels.get(position).getTvPassword());
+        holder.tvCompany.setText(mPasswordKingModels.get(position).getCompanyName());
+        holder.tvUserName.setText(mPasswordKingModels.get(position).getUserName());
+        holder.tvPassword.setText(mPasswordKingModels.get(position).getPassword());
 
     }
 
