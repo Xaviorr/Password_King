@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     @Override
     public void onItemClick(int position) {
         Intent intent1 = new Intent(this, DataEntry.class);
-        PasswordKingModel accountInfo = mPasswordKingModels.get(position);
+        PasswordKingModel accountInfo = adapter.getPasswordKingModels().get(position);
         intent1.putExtra("ID", position);
         intent1.putExtra("CompanyName", accountInfo.getCompanyName());
         intent1.putExtra("UserName", accountInfo.getUserName());
