@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         searchView.setIconifiedByDefault(false);
         searchView.requestFocusFromTouch();
 
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {

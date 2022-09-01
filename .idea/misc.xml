@@ -3,9 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Xaviorr/AndroidStudioProjects/PasswordKing/app/src/main/res/drawable/button_bg.xml" value="0.521" />
         <entry key="..\:/Users/Xaviorr/AndroidStudioProjects/PasswordKing/app/src/main/res/drawable/ic_baseline_account_circle_24.xml" value="0.522" />
         <entry key="..\:/Users/Xaviorr/AndroidStudioProjects/PasswordKing/app/src/main/res/drawable/ic_baseline_account_circle_48.xml" value="0.522" />
         <entry key="..\:/Users/Xaviorr/AndroidStudioProjects/PasswordKing/app/src/main/res/layout/activity_data_entry.xml" value="0.5234375" />
+        <entry key="..\:/Users/Xaviorr/AndroidStudioProjects/PasswordKing/app/src/main/res/layout/activity_login.xml" value="0.5234375" />
         <entry key="..\:/Users/Xaviorr/AndroidStudioProjects/PasswordKing/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/Users/Xaviorr/AndroidStudioProjects/PasswordKing/app/src/main/res/layout/content_data_entry.xml" value="0.5234375" />
         <entry key="..\:/Users/Xaviorr/AndroidStudioProjects/PasswordKing/app/src/main/res/layout/data_entry.xml" value="0.5234375" />
