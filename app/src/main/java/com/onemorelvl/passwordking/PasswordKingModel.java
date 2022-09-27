@@ -1,15 +1,27 @@
 package com.onemorelvl.passwordking;
 
-class PasswordKingModel {
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "account_table")
+public class PasswordKingModel {
+
+   @PrimaryKey(autoGenerate = true)
+   private int id;
+
    private int mImageView;
    private String mCompanyName, mUserName, mPassword;
 
-   public PasswordKingModel(int imageView, String tvCompanyName, String tvUserName, String tvPassword) {
+   public PasswordKingModel(int imageView, String companyName, String userName, String password) {
       mImageView = imageView;
-      this.mCompanyName = tvCompanyName;
-      this.mUserName = tvUserName;
-      this.mPassword = tvPassword;
+      this.mCompanyName = companyName;
+      this.mUserName = userName;
+      this.mPassword = password;
    }
+
+   public int getId() { return id; }
+
+   public void setId(int id) { this.id = id; }
 
    public int getImageView() {
       return mImageView;

@@ -49,7 +49,7 @@ public class Login extends AppCompatActivity {
 
     public void login(String username, String password) {
 
-        if (username.equals("franst2b@gmail.com") && password.equals("Fr1an2cis3")) {
+        if (username.equals("user") && password.equals("password")) {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         }else {

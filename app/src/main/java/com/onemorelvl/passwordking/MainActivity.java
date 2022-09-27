@@ -6,6 +6,8 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,11 +26,13 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements ItemClickListener{
     private ArrayList<PasswordKingModel> mPasswordKingModels = new ArrayList<>();
     private String TAG = "MainActivity";
     private PasswordKingAdapter adapter;
+    private AccountViewModel mAccountViewModel;
 
     private ActivityResultLauncher<Intent> mActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -53,6 +57,15 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
 
         FloatingActionButton fab = findViewById(R.id.floatingActionButton);
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        initRecyclerView(recyclerView);
+
+        mAccountViewModel = new ViewModelProvider(this).get(AccountViewModel.class);
+        mAccountViewModel.getAllAccounts().observe(this, new Observer<List<PasswordKingModel>>() {
+            @Override
+            public void onChanged(List<PasswordKingModel> passwordKingModels) {
+                adapter.updateList((ArrayList<PasswordKingModel>) passwordKingModels);
+            }
+        });
 
         Intent intent = new Intent(this, DataEntry.class);
 
@@ -64,8 +77,8 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
             }
         });
 
-        initAccountInfo();
-        initRecyclerView(recyclerView);
+        //initAccountInfo();
+
 
     }
 
