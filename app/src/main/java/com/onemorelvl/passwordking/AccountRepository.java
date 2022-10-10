@@ -2,6 +2,7 @@ package com.onemorelvl.passwordking;
 
 import android.app.Application;
 import android.os.AsyncTask;
+import android.telephony.VisualVoicemailService;
 
 import androidx.lifecycle.LiveData;
 
@@ -24,9 +25,7 @@ public class AccountRepository {
       new InsertAccountAsyncTask(mAccountDao).execute(account);
    }
 
-   public Completable update(PasswordKingModel account) {
-      return mAccountDao.update(account);
-   }
+   public Completable update(PasswordKingModel account) { return mAccountDao.update(account); }
 
    public Completable delete(PasswordKingModel account) {
       return mAccountDao.delete(account);
@@ -49,6 +48,5 @@ public class AccountRepository {
          return null;
       }
    }
-
 
 }
