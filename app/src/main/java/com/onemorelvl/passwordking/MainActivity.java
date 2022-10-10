@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,11 +29,21 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.CompletableObserver;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Scheduler;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.observers.DisposableCompletableObserver;
+import io.reactivex.rxjava3.observers.DisposableObserver;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
 public class MainActivity extends AppCompatActivity implements ItemClickListener{
     private ArrayList<PasswordKingModel> mPasswordKingModels = new ArrayList<>();
     private String TAG = "MainActivity";
     private PasswordKingAdapter adapter;
     private AccountViewModel mAccountViewModel;
+    private PasswordKingModel mPasswordKingModel= new PasswordKingModel(R.drawable.ic_baseline_account_circle_48, "Discord", "franzz@charter.net", "Password");
 
     private ActivityResultLauncher<Intent> mActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -64,8 +75,24 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
             @Override
             public void onChanged(List<PasswordKingModel> passwordKingModels) {
                 adapter.updateList((ArrayList<PasswordKingModel>) passwordKingModels);
+                Log.d(TAG, "Livedata onChanged: ");
             }
         });
+
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                mAccountViewModel.delete(adapter.getAccountAt(viewHolder.getAdapterPosition()))
+                        .subscribeOn(Schedulers.io())
+                        .subscribe();
+                Toast.makeText(MainActivity.this, "Account Deleted", Toast.LENGTH_SHORT).show();
+            }
+        }).attachToRecyclerView(recyclerView);
 
         Intent intent = new Intent(this, DataEntry.class);
 
@@ -162,17 +189,19 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         String companyName = intent.getStringExtra("CompanyName");
         String userName = intent.getStringExtra("UserName");
         String password = intent.getStringExtra("Password");
+        PasswordKingModel account = new PasswordKingModel(R.drawable.ic_baseline_account_circle_48, companyName, userName, password);
 
         if (intent.hasExtra("ID")){
             int id = intent.getIntExtra("ID", -1);
             if (id >= 0) {
-                mPasswordKingModels.remove(id);
-                mPasswordKingModels.add(id, new PasswordKingModel(R.drawable.ic_baseline_account_circle_48, companyName, userName, password));
+                account.setId(id+1);
+                mAccountViewModel.update(account)
+                        .subscribeOn(Schedulers.io())
+                        .subscribe();
             }
         }else {
-            mPasswordKingModels.add(new PasswordKingModel(R.drawable.ic_baseline_account_circle_48, companyName, userName, password));
+            mAccountViewModel.insert(account);
         }
-        adapter.notifyDataSetChanged();
 
     }
 

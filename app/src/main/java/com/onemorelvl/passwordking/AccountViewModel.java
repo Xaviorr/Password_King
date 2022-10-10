@@ -19,8 +19,7 @@ public class AccountViewModel extends AndroidViewModel {
 
    public void insert(PasswordKingModel account) {repository.insert(account);}
 
-   public Completable update(PasswordKingModel account) {
-      return repository.update(account);
+   public Completable update(PasswordKingModel account) {return repository.update(account);
    }
 
    public Completable delete(PasswordKingModel account) {

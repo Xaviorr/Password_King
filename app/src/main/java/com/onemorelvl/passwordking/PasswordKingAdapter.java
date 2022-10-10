@@ -48,6 +48,10 @@ class PasswordKingAdapter extends RecyclerView.Adapter<PasswordKingAdapter.MyVie
         return mPasswordKingModels.size();
     }
 
+    public PasswordKingModel getAccountAt(int position) {
+        return mPasswordKingModels.get(position);
+    }
+
     public ArrayList<PasswordKingModel> getPasswordKingModels() {
         return mPasswordKingModels;
     }
