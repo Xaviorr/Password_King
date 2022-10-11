@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 import java.util.List;
 
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class AccountRepository {
 
@@ -25,10 +26,13 @@ public class AccountRepository {
       new InsertAccountAsyncTask(mAccountDao).execute(account);
    }
 
-   public Completable update(PasswordKingModel account) { return mAccountDao.update(account); }
+   public Completable update(PasswordKingModel account) {
+      return mAccountDao.update(account)
+              .subscribeOn(Schedulers.io()); }
 
    public Completable delete(PasswordKingModel account) {
-      return mAccountDao.delete(account);
+      return mAccountDao.delete(account)
+              .subscribeOn(Schedulers.io());
    }
 
    public LiveData<List<PasswordKingModel>> getAllAccounts() {

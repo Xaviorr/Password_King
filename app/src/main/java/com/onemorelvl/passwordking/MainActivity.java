@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     private String TAG = "MainActivity";
     private PasswordKingAdapter adapter;
     private AccountViewModel mAccountViewModel;
-    private PasswordKingModel mPasswordKingModel= new PasswordKingModel(R.drawable.ic_baseline_account_circle_48, "Discord", "franzz@charter.net", "Password");
 
     private ActivityResultLauncher<Intent> mActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -87,9 +86,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                mAccountViewModel.delete(adapter.getAccountAt(viewHolder.getAdapterPosition()))
-                        .subscribeOn(Schedulers.io())
-                        .subscribe();
+                mAccountViewModel.delete(adapter.getAccountAt(viewHolder.getAdapterPosition()));
                 Toast.makeText(MainActivity.this, "Account Deleted", Toast.LENGTH_SHORT).show();
             }
         }).attachToRecyclerView(recyclerView);
@@ -195,9 +192,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
             int id = intent.getIntExtra("ID", -1);
             if (id >= 0) {
                 account.setId(id+1);
-                mAccountViewModel.update(account)
-                        .subscribeOn(Schedulers.io())
-                        .subscribe();
+                mAccountViewModel.update(account);
             }
         }else {
             mAccountViewModel.insert(account);

@@ -9,12 +9,19 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
 @Database(entities = {PasswordKingModel.class}, version = 1)
 public abstract class AccountDatabase extends RoomDatabase {
 
     private static AccountDatabase instance;
-
     public abstract AccountDao accountDoa();
+    private PasswordKingModel exampleAccount = new PasswordKingModel(
+            R.drawable.ic_baseline_account_circle_48,
+            "Example",
+            "Username",
+            "Password"
+    );
 
     public static synchronized AccountDatabase getInstance(Context context) {
         if (instance == null) {
@@ -31,7 +38,11 @@ public abstract class AccountDatabase extends RoomDatabase {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
-            //AccountDao mAccountDoa = instance.accountDoa();
+//            AccountDao mAccountDoa = instance.accountDoa();
+//            mAccountDoa.insert(instance.exampleAccount)
+//                    .subscribeOn(Schedulers.io())
+//                    .subscribe();
+
             new PopulateDbAsyncTask(instance).execute();
 
 

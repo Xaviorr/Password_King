@@ -43,6 +43,13 @@ public class Login extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        username.getText().clear();
+        password.getText().clear();
+    }
+
     public void createLogin() {
         Toast.makeText(getApplicationContext(), "You're trying to create a new Account", Toast.LENGTH_LONG).show();
     }
