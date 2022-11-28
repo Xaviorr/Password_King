@@ -9,15 +9,15 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import io.reactivex.rxjava3.schedulers.Schedulers;
-
-@Database(entities = {PasswordKingModel.class}, version = 1)
+@Database(entities = {PasswordKingModel.class}, version = 2)
 public abstract class AccountDatabase extends RoomDatabase {
 
     private static AccountDatabase instance;
+
     public abstract AccountDao accountDoa();
-    private PasswordKingModel exampleAccount = new PasswordKingModel(
-            R.drawable.ic_baseline_account_circle_48,
+
+    private final PasswordKingModel exampleAccount = new PasswordKingModel(
+            'E',
             "Example",
             "Username",
             "Password"
@@ -26,7 +26,7 @@ public abstract class AccountDatabase extends RoomDatabase {
     public static synchronized AccountDatabase getInstance(Context context) {
         if (instance == null) {
             instance = Room.databaseBuilder(context.getApplicationContext(),
-                    AccountDatabase.class,"account_database")
+                            AccountDatabase.class, "account_database")
                     .fallbackToDestructiveMigration()
                     .addCallback(roomCallback)
                     .build();
@@ -34,7 +34,7 @@ public abstract class AccountDatabase extends RoomDatabase {
         return instance;
     }
 
-    private static RoomDatabase.Callback roomCallback = new Callback() {
+    private static final RoomDatabase.Callback roomCallback = new Callback() {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
@@ -50,7 +50,7 @@ public abstract class AccountDatabase extends RoomDatabase {
     };
 
     private static class PopulateDbAsyncTask extends AsyncTask<Void, Void, Void> {
-        private AccountDao accountDao;
+        private final AccountDao accountDao;
 
         public PopulateDbAsyncTask(AccountDatabase db) {
             accountDao = db.accountDoa();
@@ -58,9 +58,9 @@ public abstract class AccountDatabase extends RoomDatabase {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            accountDao.insert(new PasswordKingModel(R.drawable.ic_baseline_account_circle_48, "Discord", "franzz@charter.net", "Password"));
-            accountDao.insert(new PasswordKingModel(R.drawable.ic_baseline_account_circle_48, "Pandora", "FStanley", "Password1"));
-            accountDao.insert(new PasswordKingModel(R.drawable.ic_baseline_account_circle_48, "Disney+", "franst2b@gmail.com", "Password2"));
+            accountDao.insert(new PasswordKingModel('D', "Discord", "franzz@charter.net", "Password"));
+            accountDao.insert(new PasswordKingModel('P', "Pandora", "FStanley", "Password1"));
+            accountDao.insert(new PasswordKingModel('D', "Disney+", "franst2b@gmail.com", "Password2"));
             return null;
         }
     }

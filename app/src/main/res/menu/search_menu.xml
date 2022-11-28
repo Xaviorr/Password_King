@@ -8,4 +8,11 @@
         android:title="@string/search"
         app:actionViewClass="android.widget.SearchView"
         app:showAsAction="ifRoom|collapseActionView"/>
+    <item
+        android:id="@+id/sort_ASC"
+        android:icon="@android:drawable/ic_menu_sort_by_size"
+        android:title="Sort Ascending" />
+    <item
+        android:id="@+id/sort_DSC"
+        android:title="Sort Descending"/>
 </menu>

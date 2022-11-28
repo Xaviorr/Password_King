@@ -1,7 +1,16 @@
 package com.onemorelvl.passwordking;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.SearchView;
+import android.widget.Toast;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -12,49 +21,25 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.SearchView;
-import android.widget.Toast;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.CompletableObserver;
-import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.core.Scheduler;
-import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.observers.DisposableCompletableObserver;
-import io.reactivex.rxjava3.observers.DisposableObserver;
-import io.reactivex.rxjava3.schedulers.Schedulers;
-
-public class MainActivity extends AppCompatActivity implements ItemClickListener{
+public class MainActivity extends AppCompatActivity implements ItemClickListener {
     private ArrayList<PasswordKingModel> mPasswordKingModels = new ArrayList<>();
-    private String TAG = "MainActivity";
+    private final String TAG = "MainActivity";
     private PasswordKingAdapter adapter;
     private AccountViewModel mAccountViewModel;
 
-    private ActivityResultLauncher<Intent> mActivityResultLauncher = registerForActivityResult(
+    private final ActivityResultLauncher<Intent> mActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    Log.d(TAG, "onActivityResult: ");
-                    if (result.getResultCode() == 1) {
-                        Intent intent = result.getData();
-                        if (intent != null) {
-                            setData(intent);
-                        }
+            result -> {
+                Log.d(TAG, "onActivityResult: ");
+                if (result.getResultCode() == 1) {
+                    Intent intent = result.getData();
+                    if (intent != null) {
+                        setData(intent);
                     }
                 }
             });
@@ -74,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
             @Override
             public void onChanged(List<PasswordKingModel> passwordKingModels) {
                 adapter.updateList((ArrayList<PasswordKingModel>) passwordKingModels);
+                mPasswordKingModels = (ArrayList<PasswordKingModel>) passwordKingModels;
                 Log.d(TAG, "Livedata onChanged: ");
             }
         });
@@ -97,13 +83,8 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
             @Override
             public void onClick(View view) {
                 mActivityResultLauncher.launch(intent);
-
             }
         });
-
-        //initAccountInfo();
-
-
     }
 
 
@@ -111,11 +92,12 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     public boolean onCreateOptionsMenu(@NonNull Menu menu) {
         getMenuInflater().inflate(R.menu.search_menu, menu);
         MenuItem searchItem = menu.findItem(R.id.actionSearch);
+        MenuItem sortAsc = menu.findItem(R.id.sort_ASC);
+        MenuItem sortDsc = menu.findItem(R.id.sort_DSC);
         SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setQueryHint("Enter Text to Search");
         searchView.setIconifiedByDefault(false);
         searchView.requestFocusFromTouch();
-
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -137,17 +119,30 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
                 searchView.setQuery("", true);
                 InputMethodManager inputMethodManager
                         = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(),0);
+                inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
             }
         });
 
+
         return true;
     }
 
-
-
-
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.sort_ASC:
+                Toast.makeText(this, "Show Accounts Sorted in Ascending Order", Toast.LENGTH_SHORT).show();
+                //mAccountViewModel.getAllAccountsAsc();
+                return true;
+            case R.id.sort_DSC:
+                Toast.makeText(this, "Show Accounts Sorted in Descending Order", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     private void filter(String text) {
         ArrayList<PasswordKingModel> filteredList = new ArrayList<>();
@@ -158,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
             }
         }
         if (filteredList.isEmpty()) {
-            Toast.makeText(this, "No Items Found", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "No Items Found", Toast.LENGTH_SHORT).show();
         } else {
             adapter.updateList(filteredList);
         }
@@ -174,47 +169,32 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     public void onItemClick(int position) {
         Intent intent1 = new Intent(this, DataEntry.class);
         PasswordKingModel accountInfo = adapter.getPasswordKingModels().get(position);
-        intent1.putExtra("ID", position);
+        intent1.putExtra("ID", accountInfo.getId());
         intent1.putExtra("CompanyName", accountInfo.getCompanyName());
         intent1.putExtra("UserName", accountInfo.getUserName());
         intent1.putExtra("Password", accountInfo.getPassword());
         mActivityResultLauncher.launch(intent1);
-
     }
 
     private void setData(Intent intent) {
         String companyName = intent.getStringExtra("CompanyName");
         String userName = intent.getStringExtra("UserName");
         String password = intent.getStringExtra("Password");
-        PasswordKingModel account = new PasswordKingModel(R.drawable.ic_baseline_account_circle_48, companyName, userName, password);
+        if (companyName.trim().isEmpty() || userName.trim().isEmpty() || password.trim().isEmpty()) {
+            Toast.makeText(this, "Save Failed. The account is missing info.  Please check it and enter missing info.", Toast.LENGTH_LONG).show();
+            return;
+        }
+        PasswordKingModel account = new PasswordKingModel(companyName.charAt(0), companyName, userName, password);
 
-        if (intent.hasExtra("ID")){
+        if (intent.hasExtra("ID")) {
             int id = intent.getIntExtra("ID", -1);
             if (id >= 0) {
-                account.setId(id+1);
+                account.setId(id);
                 mAccountViewModel.update(account);
+                Log.d(TAG, "setData: account updated " + id);
             }
-        }else {
+        } else {
             mAccountViewModel.insert(account);
         }
-
-    }
-
-
-    private void initAccountInfo() {
-        mPasswordKingModels.add(new PasswordKingModel(R.drawable.ic_baseline_account_circle_48, "Discord", "franzz@charter.net", "Password"));
-        mPasswordKingModels.add(new PasswordKingModel(R.drawable.ic_baseline_account_circle_48, "Pandora", "FStanley", "Password1"));
-        mPasswordKingModels.add(new PasswordKingModel(R.drawable.ic_baseline_account_circle_48, "Disney+", "franst2b@gmail.com", "Password2"));
-        mPasswordKingModels.add(new PasswordKingModel(R.drawable.ic_baseline_account_circle_48, "BattleNet", "Xaviorr", "Password3"));
-        mPasswordKingModels.add(new PasswordKingModel(R.drawable.ic_baseline_account_circle_48, "Discover Fran", "FStanley", "Password4"));
-        mPasswordKingModels.add(new PasswordKingModel(R.drawable.ic_baseline_account_circle_48, "Discover Amy", "FSYanley2b", "Password5"));
-        mPasswordKingModels.add(new PasswordKingModel(R.drawable.ic_baseline_account_circle_48, "Discover ERS", "ERSResources", "Password6"));
-        mPasswordKingModels.add(new PasswordKingModel(R.drawable.ic_baseline_account_circle_48, "Bank Of America", "AMyst2b", "Password7"));
-        mPasswordKingModels.add(new PasswordKingModel(R.drawable.ic_baseline_account_circle_48, "Capital One", "Fstanley", "Password8"));
-        mPasswordKingModels.add(new PasswordKingModel(R.drawable.ic_baseline_account_circle_48, "Web First", "Stanley", "Password9"));
-        mPasswordKingModels.add(new PasswordKingModel(R.drawable.ic_baseline_account_circle_48, "SCU", "Stanley", "Password10"));
-        mPasswordKingModels.add(new PasswordKingModel(R.drawable.ic_baseline_account_circle_48, "ULine", "fran.stanley@hologic.com", "Password11"));
-        mPasswordKingModels.add(new PasswordKingModel(R.drawable.ic_baseline_account_circle_48, "NetFlix", "franzz@charter.net", "Password12"));
-
     }
 }

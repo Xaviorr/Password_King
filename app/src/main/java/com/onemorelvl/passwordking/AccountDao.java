@@ -24,8 +24,13 @@ public interface AccountDao {
     @Delete
     Completable delete(PasswordKingModel account);
 
-    @Query("SELECT * FROM account_table ORDER BY id ASC")
+    @Query("SELECT * FROM account_table ORDER BY mCompanyName ASC")
     LiveData<List<PasswordKingModel>> getAllAccounts();
 
+    @Query("SELECT * FROM account_table ORDER BY mCompanyName ASC")
+    LiveData<List<PasswordKingModel>> getAllAccountsAsc();
+
+    @Query("SELECT * FROM account_table ORDER BY mCompanyName DESC")
+    LiveData<List<PasswordKingModel>> getALlAccountsDesc();
 
 }

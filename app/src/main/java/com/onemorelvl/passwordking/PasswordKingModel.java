@@ -6,36 +6,40 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "account_table")
 public class PasswordKingModel {
 
-   @PrimaryKey(autoGenerate = true)
-   private int id;
+    @PrimaryKey(autoGenerate = true)
+    private int id;
 
-   private int mImageView;
-   private String mCompanyName, mUserName, mPassword;
+    private final char mIcon;
+    private final String mCompanyName;
+    private final String mUserName;
+    private final String mPassword;
 
-   public PasswordKingModel(int imageView, String companyName, String userName, String password) {
-      mImageView = imageView;
-      this.mCompanyName = companyName;
-      this.mUserName = userName;
-      this.mPassword = password;
-   }
+    public PasswordKingModel(char icon, String companyName, String userName, String password) {
+        this.mIcon = icon;
+        this.mCompanyName = companyName;
+        this.mUserName = userName;
+        this.mPassword = password;
+    }
 
-   public int getId() { return id; }
+    public int getId() {
+        return id;
+    }
 
-   public void setId(int id) { this.id = id; }
+    public void setId(int id) { this.id = id; }
 
-   public int getImageView() {
-      return mImageView;
-   }
+    public char getIcon() {
+        return mIcon;
+    }
 
-   public String getCompanyName() {
-      return mCompanyName;
-   }
+    public String getCompanyName() {
+        return mCompanyName;
+    }
 
-   public String getUserName() {
-      return mUserName;
-   }
+    public String getUserName() {
+        return mUserName;
+    }
 
-   public String getPassword() {
-      return mPassword;
-   }
+    public String getPassword() {
+        return mPassword;
+    }
 }

@@ -1,12 +1,12 @@
 package com.onemorelvl.passwordking;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class DataEntry extends AppCompatActivity {
     private EditText etCompanyName;
@@ -18,6 +18,7 @@ public class DataEntry extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data_entry);
+        setTitle("Add/Edit Account");
         etCompanyName = findViewById(R.id.etComanyName);
         etUserName = findViewById(R.id.etUserName);
         etPassword = findViewById(R.id.etPassword);

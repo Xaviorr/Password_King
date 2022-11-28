@@ -2,5 +2,5 @@ package com.onemorelvl.passwordking;
 
 interface ItemClickListener {
 
- void onItemClick(int position);
+    void onItemClick(int position);
 }
