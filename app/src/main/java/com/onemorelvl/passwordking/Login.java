@@ -11,8 +11,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class Login extends AppCompatActivity {
-    TextView createLogin;
-    EditText username, password;
+    TextView information;
+    EditText password;
     Button loginButton;
 
     @Override
@@ -20,23 +20,21 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        createLogin = findViewById(R.id.tvCreateAccount);
-        username = findViewById(R.id.editTextUserName);
+        information = findViewById(R.id.tvInformation);
         password = findViewById(R.id.editTextPassword);
         loginButton = findViewById(R.id.loginButton);
-
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                login(username.getText().toString(), password.getText().toString());
+                login(password.getText().toString());
             }
         });
 
-        createLogin.setOnClickListener(new View.OnClickListener() {
+        information.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createLogin();
+                openInfo();
             }
         });
 
@@ -45,21 +43,21 @@ public class Login extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        username.getText().clear();
         password.getText().clear();
     }
 
-    public void createLogin() {
-        Toast.makeText(getApplicationContext(), "You're trying to create a new Account", Toast.LENGTH_LONG).show();
+    public void openInfo() {
+        Toast.makeText(getApplicationContext(), "You're trying to get Information", Toast.LENGTH_LONG).show();
     }
 
-    public void login(String username, String password) {
+    public void login(String password) {
 
-        if (username.equals("user") && password.equals("password")) {
+        if (password.equals("password")) {
             Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("Password", password);
             startActivity(intent);
         } else {
-            Toast.makeText(getApplicationContext(), "You have entered the incorrect Username or Password", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "You have entered the incorrect Password", Toast.LENGTH_LONG).show();
         }
     }
 

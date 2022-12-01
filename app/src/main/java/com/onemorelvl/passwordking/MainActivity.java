@@ -53,8 +53,16 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         FloatingActionButton fab = findViewById(R.id.floatingActionButton);
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         initRecyclerView(recyclerView);
+        String password;
+        Intent loginIntent = getIntent();
+        if (loginIntent.hasExtra("Password")) {
+            password = loginIntent.getStringExtra("Password");
+        }else{
+            password = "error";
+            Toast.makeText(this, "Password Error. Cannot show account list.", Toast.LENGTH_LONG).show();
+        }
 
-        mAccountViewModel = new ViewModelProvider(this).get(AccountViewModel.class);
+        mAccountViewModel = new ViewModelProvider(this, new AccountViewModelFactory(this.getApplication(), password)).get(AccountViewModel.class);
         mAccountViewModel.getAllAccounts().observe(this, new Observer<List<PasswordKingModel>>() {
             @Override
             public void onChanged(List<PasswordKingModel> passwordKingModels) {
@@ -78,7 +86,6 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         }).attachToRecyclerView(recyclerView);
 
         Intent intent = new Intent(this, DataEntry.class);
-
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

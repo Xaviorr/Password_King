@@ -9,12 +9,17 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {PasswordKingModel.class}, version = 2)
+import net.sqlcipher.database.SQLiteDatabase;
+import net.sqlcipher.database.SupportFactory;
+
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
+@Database(entities = {PasswordKingModel.class}, version = 1)
 public abstract class AccountDatabase extends RoomDatabase {
 
     private static AccountDatabase instance;
-
     public abstract AccountDao accountDoa();
+
 
     private final PasswordKingModel exampleAccount = new PasswordKingModel(
             'E',
@@ -23,12 +28,14 @@ public abstract class AccountDatabase extends RoomDatabase {
             "Password"
     );
 
-    public static synchronized AccountDatabase getInstance(Context context) {
+    public static synchronized AccountDatabase getInstance(Context context, String password) {
         if (instance == null) {
+            SupportFactory supportFactory = new SupportFactory(SQLiteDatabase.getBytes(password.toCharArray()));
             instance = Room.databaseBuilder(context.getApplicationContext(),
                             AccountDatabase.class, "account_database")
                     .fallbackToDestructiveMigration()
                     .addCallback(roomCallback)
+                    .openHelperFactory(supportFactory)
                     .build();
         }
         return instance;
@@ -38,31 +45,14 @@ public abstract class AccountDatabase extends RoomDatabase {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
-//            AccountDao mAccountDoa = instance.accountDoa();
-//            mAccountDoa.insert(instance.exampleAccount)
-//                    .subscribeOn(Schedulers.io())
-//                    .subscribe();
+            AccountDao mAccountDoa = instance.accountDoa();
+            mAccountDoa.insert(instance.exampleAccount)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe();
 
-            new PopulateDbAsyncTask(instance).execute();
 
 
         }
     };
-
-    private static class PopulateDbAsyncTask extends AsyncTask<Void, Void, Void> {
-        private final AccountDao accountDao;
-
-        public PopulateDbAsyncTask(AccountDatabase db) {
-            accountDao = db.accountDoa();
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            accountDao.insert(new PasswordKingModel('D', "Discord", "franzz@charter.net", "Password"));
-            accountDao.insert(new PasswordKingModel('P', "Pandora", "FStanley", "Password1"));
-            accountDao.insert(new PasswordKingModel('D', "Disney+", "franst2b@gmail.com", "Password2"));
-            return null;
-        }
-    }
 
 }

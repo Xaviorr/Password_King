@@ -16,7 +16,7 @@ import io.reactivex.rxjava3.core.Completable;
 public interface AccountDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(PasswordKingModel account);
+    Completable insert(PasswordKingModel account);
 
     @Update
     Completable update(PasswordKingModel account);

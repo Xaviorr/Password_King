@@ -14,26 +14,11 @@
         android:background="@drawable/scenic_railroad"
         android:fontFamily="cursive"
         android:paddingVertical="70dp"
-        android:text="Login"
+        android:text="Welcome"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="50dp" />
 
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="30dp"
-        android:text="UserName:"
-        android:textColor="@color/purple_500" />
-
-    <EditText
-        android:id="@+id/editTextUserName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="30dp"
-        android:layout_marginBottom="30dp"
-        android:inputType="textPersonName" />
 
     <TextView
         android:layout_width="match_parent"
@@ -60,10 +45,10 @@
         android:text="Login" />
 
     <TextView
-        android:id="@+id/tvCreateAccount"
+        android:id="@+id/tvInformation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="No account yet? Create account"
+        android:text="Information"
         android:textAlignment="center" />
 
 </LinearLayout>

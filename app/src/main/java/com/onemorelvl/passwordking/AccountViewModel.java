@@ -18,14 +18,15 @@ public class AccountViewModel extends AndroidViewModel {
     private final CompositeDisposable mDisposable = new CompositeDisposable();
 
 
-    public AccountViewModel(@NonNull Application application) {
+    public AccountViewModel(@NonNull Application application, String password) {
         super(application);
-        repository = new AccountRepository(application);
+        repository = new AccountRepository(application, password);
         allAccounts = repository.getAllAccounts();
     }
 
     public void insert(PasswordKingModel account) {
-        repository.insert(account);
+        mDisposable.add(repository.insert(account)
+                .subscribe());
     }
 
     public void update(PasswordKingModel account) {
