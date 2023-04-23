@@ -2,6 +2,7 @@ package com.onemorelvl.passwordking;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -15,6 +16,8 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -22,6 +25,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     private final String TAG = "MainActivity";
     private PasswordKingAdapter adapter;
     private AccountViewModel mAccountViewModel;
+   ;
 
     private final ActivityResultLauncher<Intent> mActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -53,14 +58,10 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         FloatingActionButton fab = findViewById(R.id.floatingActionButton);
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         initRecyclerView(recyclerView);
-        String password;
+        ConstraintLayout mConstraintLayout = findViewById(R.id.constraintLayout);
+
         Intent loginIntent = getIntent();
-        if (loginIntent.hasExtra("Password")) {
-            password = loginIntent.getStringExtra("Password");
-        }else{
-            password = "error";
-            Toast.makeText(this, "Password Error. Cannot show account list.", Toast.LENGTH_LONG).show();
-        }
+        String password = loginIntent.getStringExtra("Password");
 
         mAccountViewModel = new ViewModelProvider(this, new AccountViewModelFactory(this.getApplication(), password)).get(AccountViewModel.class);
         mAccountViewModel.getAllAccounts().observe(this, new Observer<List<PasswordKingModel>>() {
@@ -80,8 +81,17 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                mAccountViewModel.delete(adapter.getAccountAt(viewHolder.getAdapterPosition()));
-                Toast.makeText(MainActivity.this, "Account Deleted", Toast.LENGTH_SHORT).show();
+                PasswordKingModel account = adapter.getAccountAt(viewHolder.getAdapterPosition());
+                mAccountViewModel.delete(account);
+                Snackbar snackbar = Snackbar.make(mConstraintLayout, "Account Deleted", Snackbar.LENGTH_LONG);
+                snackbar.setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mAccountViewModel.insert(account);
+                    }
+                });
+                snackbar.setActionTextColor(Color.YELLOW);
+                snackbar.show();
             }
         }).attachToRecyclerView(recyclerView);
 

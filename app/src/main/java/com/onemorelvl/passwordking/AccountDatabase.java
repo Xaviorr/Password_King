@@ -1,7 +1,6 @@
 package com.onemorelvl.passwordking;
 
 import android.content.Context;
-import android.os.AsyncTask;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
@@ -18,6 +17,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public abstract class AccountDatabase extends RoomDatabase {
 
     private static AccountDatabase instance;
+
     public abstract AccountDao accountDoa();
 
 
@@ -49,7 +49,6 @@ public abstract class AccountDatabase extends RoomDatabase {
             mAccountDoa.insert(instance.exampleAccount)
                     .subscribeOn(Schedulers.io())
                     .subscribe();
-
 
 
         }

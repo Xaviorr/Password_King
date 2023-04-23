@@ -6,7 +6,6 @@ import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -40,9 +39,9 @@ class PasswordKingAdapter extends RecyclerView.Adapter<PasswordKingAdapter.MyVie
     @Override
     public void onBindViewHolder(@NonNull PasswordKingAdapter.MyViewHolder holder, int position) {
         Random mRandom = new Random();
-        int color = Color.argb(255, mRandom.nextInt(256), mRandom.nextInt(256), mRandom.nextInt(256));
+        final int color = Color.argb(255, mRandom.nextInt(256), mRandom.nextInt(256), mRandom.nextInt(256));
         holder.tvIcon.setText(String.valueOf(mPasswordKingModels.get(position).getIcon()));
-        ((GradientDrawable)holder.tvIcon.getBackground()).setColor(color);
+        ((GradientDrawable) holder.tvIcon.getBackground()).setColor(color);
         holder.tvCompany.setText(mPasswordKingModels.get(position).getCompanyName());
         holder.tvUserName.setText(mPasswordKingModels.get(position).getUserName());
         holder.tvPassword.setText(mPasswordKingModels.get(position).getPassword());
